@@ -12,8 +12,10 @@
     tools:context="com.loopcupcakes.gassy.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
+    <fragment
+        android:id="@+id/a_main_stations"
+        class="com.loopcupcakes.gassy.fragments.StationsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>
