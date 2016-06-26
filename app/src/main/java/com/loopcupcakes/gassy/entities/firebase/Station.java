@@ -1,7 +1,5 @@
 package com.loopcupcakes.gassy.entities.firebase;
 
-import java.util.Map;
-
 /**
  * Created by evin on 6/20/16.
  */
