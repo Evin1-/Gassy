@@ -27,7 +27,7 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
 
-            textView = (TextView) itemView.findViewById(R.id.r_stations_txt);
+            textView = (TextView) itemView.findViewById(R.id.rvItemTitle);
         }
     }
 
