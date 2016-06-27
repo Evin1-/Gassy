@@ -27,7 +27,7 @@ import com.loopcupcakes.gassy.network.RetrofitHelper;
 import com.loopcupcakes.gassy.util.NetworkChecker;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -45,6 +45,7 @@ public class StationsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private ArrayList<Station> mStations;
+    private HashMap<Station, Double> mDistances;
     private StationsAdapter mAdapter;
 
     private DatabaseReference mDatabase;
@@ -62,6 +63,7 @@ public class StationsFragment extends Fragment {
 
         setRetainInstance(true);
         mStations = new ArrayList<>();
+        mDistances = new HashMap<>();
         mAdapter = new StationsAdapter(mStations);
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
@@ -131,8 +133,10 @@ public class StationsFragment extends Fragment {
                 } else {
                     Log.d(TAG, "onDataChange: " + station.getLatitude() + " " + station.getLongitude());
                 }
-                if (!mStations.contains(station)) {
+
+                if (!mDistances.containsKey(station)) {
                     mStations.add(station);
+                    mDistances.put(station, 0.0);
                     mAdapter.notifyDataSetChanged();
                 }
                 Log.d(TAG, "onDataChange: " + station.hashCode() + " " + mStations.size());
