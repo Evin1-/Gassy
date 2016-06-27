@@ -5,6 +5,7 @@ package com.loopcupcakes.gassy.entities.firebase;
  */
 public class Station {
 
+    public String id;
     public String name;
     public String vicinity;
     public double latitude;
@@ -16,13 +17,22 @@ public class Station {
 
     }
 
-    public Station(double latitude, double longitude, double rating, boolean valid, String name, String vicinity) {
+    public Station(String id, String name, String vicinity, double latitude, double longitude, double rating, boolean valid) {
+        this.id = id;
+        this.name = name;
+        this.vicinity = vicinity;
         this.latitude = latitude;
         this.longitude = longitude;
         this.rating = rating;
         this.valid = valid;
-        this.name = name;
-        this.vicinity = vicinity;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -71,5 +81,21 @@ public class Station {
 
     public void setValid(boolean valid) {
         this.valid = valid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Station station = (Station) o;
+
+        return id != null ? id.equals(station.id) : station.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

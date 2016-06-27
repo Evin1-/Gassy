@@ -27,6 +27,7 @@ import com.loopcupcakes.gassy.network.RetrofitHelper;
 import com.loopcupcakes.gassy.util.NetworkChecker;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +44,7 @@ public class StationsFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private ArrayList<Result> mResults;
+    private HashSet<Station> mStations;
     private StationsAdapter mAdapter;
 
     private DatabaseReference mDatabase;
@@ -60,6 +62,7 @@ public class StationsFragment extends Fragment {
 
         setRetainInstance(true);
         mResults = new ArrayList<>();
+        mStations = new HashSet<>();
         mAdapter = new StationsAdapter(mResults);
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
@@ -115,6 +118,7 @@ public class StationsFragment extends Fragment {
         final String placeId = result.getPlaceId();
         final String name = result.getName();
         final String vicinity = result.getVicinity();
+        final String id = result.getId();
 
         // TODO: 6/26/16 Do everything in a transaction
 
@@ -124,11 +128,13 @@ public class StationsFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Station station = dataSnapshot.getValue(Station.class);
                 if (station == null) {
-                    station = new Station(latitude, longitude, 0.0, true, name, vicinity);
+                    station = new Station(id, name, vicinity, latitude, longitude, 0.0, true);
                     stationReference.setValue(station);
                 } else {
                     Log.d(TAG, "onDataChange: " + station.getLatitude() + " " + station.getLongitude());
                 }
+                mStations.add(station);
+                Log.d(TAG, "onDataChange: " + station.hashCode() + " " + mStations.size());
             }
 
             @Override
