@@ -7,16 +7,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.loopcupcakes.gassy.R;
-import com.loopcupcakes.gassy.entities.places.Result;
+import com.loopcupcakes.gassy.entities.firebase.Station;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * Created by evin on 6/3/16.
  */
 public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHolder> {
 
-    private ArrayList<Result> mResults;
+    private LinkedHashMap<Station, Double> mStations;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -29,8 +30,8 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
         }
     }
 
-    public StationsAdapter(ArrayList<Result> results) {
-        this.mResults = results;
+    public StationsAdapter(LinkedHashMap<Station, Double> results) {
+        this.mStations = results;
     }
 
     @Override
@@ -43,14 +44,15 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String string = mResults.get(position).getGeometry().getLocation().toString();
+        ArrayList<Station> stationArrayList = new ArrayList<>(mStations.keySet());
+        Station station = stationArrayList.get(position);
 
         TextView textViewName = holder.textView;
-        textViewName.setText(string);
+        textViewName.setText(station.getLatitude() + " " + station.getLongitude());
     }
 
     @Override
     public int getItemCount() {
-        return (mResults == null) ? 0 : mResults.size();
+        return (mStations == null) ? 0 : mStations.size();
     }
 }

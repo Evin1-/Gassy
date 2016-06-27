@@ -28,6 +28,8 @@ import com.loopcupcakes.gassy.util.NetworkChecker;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,8 +45,7 @@ public class StationsFragment extends Fragment {
     private static final String STATIONS_CHILD_KEY = "stations";
 
     private RecyclerView mRecyclerView;
-    private ArrayList<Result> mResults;
-    private HashSet<Station> mStations;
+    private LinkedHashMap<Station, Double> mStations;
     private StationsAdapter mAdapter;
 
     private DatabaseReference mDatabase;
@@ -61,9 +62,8 @@ public class StationsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
-        mResults = new ArrayList<>();
-        mStations = new HashSet<>();
-        mAdapter = new StationsAdapter(mResults);
+        mStations = new LinkedHashMap<>();
+        mAdapter = new StationsAdapter(mStations);
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
@@ -90,11 +90,9 @@ public class StationsFragment extends Fragment {
             placeResponseCall.enqueue(new Callback<PlaceResponse>() {
                 @Override
                 public void onResponse(Call<PlaceResponse> call, Response<PlaceResponse> response) {
-                    mResults.clear();
-                    mResults.addAll(response.body().getResults());
-                    mAdapter.notifyDataSetChanged();
+                    List<Result> results = response.body().getResults();
 
-                    for (Result result : mResults) {
+                    for (Result result : results) {
                         Log.d(TAG, "onResponse: " + result.getGeometry().getLocation() + " " + result.getName());
                         pushStation(result);
                     }
@@ -121,6 +119,7 @@ public class StationsFragment extends Fragment {
         final String id = result.getId();
 
         // TODO: 6/26/16 Do everything in a transaction
+        // TODO: 6/26/16 Add distance as second parameter
 
         final DatabaseReference stationReference = mDatabase.child(STATIONS_CHILD_KEY).child(placeId);
         stationReference.addValueEventListener(new ValueEventListener() {
@@ -133,7 +132,8 @@ public class StationsFragment extends Fragment {
                 } else {
                     Log.d(TAG, "onDataChange: " + station.getLatitude() + " " + station.getLongitude());
                 }
-                mStations.add(station);
+                mStations.put(station, 0.0);
+                mAdapter.notifyDataSetChanged();
                 Log.d(TAG, "onDataChange: " + station.hashCode() + " " + mStations.size());
             }
 
