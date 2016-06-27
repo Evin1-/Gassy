@@ -16,6 +16,7 @@
         android:id="@+id/a_main_stations"
         class="com.loopcupcakes.gassy.fragments.StationsFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_stations" />
 
 </RelativeLayout>
