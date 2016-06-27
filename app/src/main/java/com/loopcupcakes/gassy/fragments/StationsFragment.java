@@ -12,8 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.loopcupcakes.gassy.R;
 import com.loopcupcakes.gassy.adapters.StationsAdapter;
 import com.loopcupcakes.gassy.entities.firebase.Station;
@@ -106,13 +109,28 @@ public class StationsFragment extends Fragment {
     }
 
     private void pushStation(Result result) {
-        Location location = result.getGeometry().getLocation();
-        Double latitude = location.getLat();
-        Double longitude = location.getLng();
-        String placeId = result.getPlaceId();
+        final Location location = result.getGeometry().getLocation();
+        final Double latitude = location.getLat();
+        final Double longitude = location.getLng();
+        final String placeId = result.getPlaceId();
 
-        Station station = new Station(latitude, longitude, 0.0, true);
-        mDatabase.child("stations").child(placeId).setValue(station);
+        DatabaseReference stationReference = mDatabase.child("stations").child(placeId);
+        stationReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Station station = dataSnapshot.getValue(Station.class);
+                if (station == null) {
+                    station = new Station(latitude, longitude, 0.0, true);
+                    mDatabase.child("stations").child(placeId).setValue(station);
+                } else {
+                    Log.d(TAG, "onDataChange: " + station.getLatitude() + " " + station.getLongitude());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled: " + databaseError);
+            }
+        });
     }
-
 }
