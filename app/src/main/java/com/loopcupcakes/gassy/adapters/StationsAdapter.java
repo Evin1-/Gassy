@@ -1,6 +1,7 @@
 package com.loopcupcakes.gassy.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,9 @@ import java.util.LinkedHashMap;
  */
 public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHolder> {
 
-    private LinkedHashMap<Station, Double> mStations;
+    private static final String TAG = "StationsAdapterTAG_";
+
+    private ArrayList<Station> mStations;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -30,8 +33,8 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
         }
     }
 
-    public StationsAdapter(LinkedHashMap<Station, Double> results) {
-        this.mStations = results;
+    public StationsAdapter(ArrayList<Station> stations) {
+        this.mStations = stations;
     }
 
     @Override
@@ -44,8 +47,7 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ArrayList<Station> stationArrayList = new ArrayList<>(mStations.keySet());
-        Station station = stationArrayList.get(position);
+        Station station = mStations.get(position);
 
         TextView textViewName = holder.textView;
         textViewName.setText(station.getLatitude() + " " + station.getLongitude());
