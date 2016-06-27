@@ -39,6 +39,8 @@ public class StationsFragment extends Fragment {
 
     private static final String TAG = "StationsFragmentTAG_";
 
+    private static final String STATIONS_CHILD_KEY = "stations";
+
     private RecyclerView mRecyclerView;
     private ArrayList<Result> mResults;
     private StationsAdapter mAdapter;
@@ -113,15 +115,19 @@ public class StationsFragment extends Fragment {
         final Double latitude = location.getLat();
         final Double longitude = location.getLng();
         final String placeId = result.getPlaceId();
+        final String name = result.getName();
+        final String vicinity = result.getVicinity();
 
-        DatabaseReference stationReference = mDatabase.child("stations").child(placeId);
+        // TODO: 6/26/16 Do everything in a transaction
+
+        final DatabaseReference stationReference = mDatabase.child(STATIONS_CHILD_KEY).child(placeId);
         stationReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Station station = dataSnapshot.getValue(Station.class);
                 if (station == null) {
-                    station = new Station(latitude, longitude, 0.0, true);
-                    mDatabase.child("stations").child(placeId).setValue(station);
+                    station = new Station(latitude, longitude, 0.0, true, name, vicinity);
+                    stationReference.setValue(station);
                 } else {
                     Log.d(TAG, "onDataChange: " + station.getLatitude() + " " + station.getLongitude());
                 }
