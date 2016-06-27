@@ -51,7 +51,7 @@ public class StationsFragment extends Fragment {
     private static final String LONGITUDE_TEST = "-99.172322";
 
     public StationsFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -67,7 +67,6 @@ public class StationsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_stations, container, false);
     }
 
@@ -96,12 +95,11 @@ public class StationsFragment extends Fragment {
                         Log.d(TAG, "onResponse: " + result.getGeometry().getLocation() + " " + result.getName());
                         pushStation(result);
                     }
-
                 }
 
                 @Override
                 public void onFailure(Call<PlaceResponse> call, Throwable t) {
-
+                    Log.e(TAG, "onFailure: " + t);
                 }
             });
         } else {
