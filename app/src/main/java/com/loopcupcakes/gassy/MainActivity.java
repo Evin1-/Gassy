@@ -2,7 +2,9 @@ package com.loopcupcakes.gassy;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.loopcupcakes.gassy.adapters.ViewPagerAdapter;
 import com.loopcupcakes.gassy.fragments.StationsFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +41,25 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.a_main_toolbar);
         mNavigationView = (NavigationView) findViewById(R.id.a_main_navigation);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.a_main_drawer);
+        mViewPager = (ViewPager) findViewById(R.id.a_main_viewpager);
+        mTabLayout = (TabLayout) findViewById(R.id.a_main_tablayout);
 
         setSupportActionBar(mToolbar);
         setupDrawerLayout();
-        StationsFragment stationsFragment = StationsFragment.newInstance(false);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.a_main_frame, stationsFragment, STATIONS_FRAGMENT_TAG)
-                .commit();
+        setupViewPager();
+    }
+
+    private void setupViewPager() {
+        if (mViewPager == null) {
+            return;
+        }
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(StationsFragment.newInstance(true), "TRUE_FRAGMENT");
+        viewPagerAdapter.addFragment(StationsFragment.newInstance(false), "FALSE_FRAGMENT");
+        mViewPager.setAdapter(viewPagerAdapter);
+
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override

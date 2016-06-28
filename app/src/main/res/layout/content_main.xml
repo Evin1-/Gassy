@@ -12,11 +12,9 @@
     tools:context="com.loopcupcakes.gassy.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <FrameLayout
-        android:id="@+id/a_main_frame"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/a_main_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
