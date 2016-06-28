@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:context="com.loopcupcakes.gassy.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -17,12 +17,14 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/a_main_tablayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
