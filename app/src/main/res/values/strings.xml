@@ -7,4 +7,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="placeholder_text">placeholder</string>
+
+    <string name="title_best_rated">Best rated</string>
+    <string name="title_closest">Closest</string>
 </resources>

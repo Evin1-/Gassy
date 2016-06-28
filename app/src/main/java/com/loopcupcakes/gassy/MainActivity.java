@@ -55,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(StationsFragment.newInstance(true), "TRUE_FRAGMENT");
-        viewPagerAdapter.addFragment(StationsFragment.newInstance(false), "FALSE_FRAGMENT");
+        viewPagerAdapter.addFragment(StationsFragment.newInstance(true), getString(R.string.title_best_rated));
+        viewPagerAdapter.addFragment(StationsFragment.newInstance(false), getString(R.string.title_closest));
         mViewPager.setAdapter(viewPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
