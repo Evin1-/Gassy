@@ -48,7 +48,7 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
         Station station = mStations.get(position);
 
         TextView textViewName = holder.textView;
-        textViewName.setText(station.getLatitude() + " " + station.getLongitude());
+        textViewName.setText(String.format("%s %s", station.getLatitude(), station.getLongitude()));
     }
 
     @Override

@@ -42,6 +42,7 @@ public class StationsFragment extends Fragment {
     private static final String TAG = "StationsFragmentTAG_";
 
     private static final String STATIONS_CHILD_KEY = "stations";
+    private static final String ORDERED_BY_RATING_KEY = "ORDERED_BY_RATING";
 
     private RecyclerView mRecyclerView;
     private ArrayList<Station> mStations;
@@ -52,6 +53,17 @@ public class StationsFragment extends Fragment {
 
     private static final String LATITUDE_TEST = "19.3352665";
     private static final String LONGITUDE_TEST = "-99.172322";
+
+    private boolean mOrderedByRating;
+
+    public static StationsFragment newInstance(Boolean orderedByRating) {
+        Bundle args = new Bundle();
+        args.putBoolean(ORDERED_BY_RATING_KEY, orderedByRating);
+
+        StationsFragment fragment = new StationsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public StationsFragment() {
 
@@ -69,8 +81,9 @@ public class StationsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        mOrderedByRating = args.getBoolean(ORDERED_BY_RATING_KEY, false);
         return inflater.inflate(R.layout.fragment_stations, container, false);
     }
 
@@ -87,14 +100,14 @@ public class StationsFragment extends Fragment {
     private void refreshRecycler() {
         RetrofitHelper retrofitHelper = new RetrofitHelper();
         Call<PlaceResponse> placeResponseCall = retrofitHelper.buildCall(LATITUDE_TEST, LONGITUDE_TEST);
-        if (NetworkChecker.checkInternet(getActivity().getApplicationContext()) != NetworkChecker.NO_CONNECTION) {
+        if (NetworkChecker.checkInternet(getContext()) != NetworkChecker.NO_CONNECTION) {
             placeResponseCall.enqueue(new Callback<PlaceResponse>() {
                 @Override
                 public void onResponse(Call<PlaceResponse> call, Response<PlaceResponse> response) {
                     List<Result> results = response.body().getResults();
 
                     for (Result result : results) {
-                        Log.d(TAG, "onResponse: " + result.getGeometry().getLocation() + " " + result.getName());
+                        Log.d(TAG, "onResponse: " + result.getGeometry().getLocation() + " " + result.getName() + " " + result.getPhotos().size());
                         pushStation(result);
                     }
                 }
@@ -137,6 +150,7 @@ public class StationsFragment extends Fragment {
                 if (!mDistances.containsKey(station)) {
                     mStations.add(station);
                     mDistances.put(station, 0.0);
+                    // TODO: 6/27/16 Change to notifyItemInserted
                     mAdapter.notifyDataSetChanged();
                 }
                 Log.d(TAG, "onDataChange: " + station.hashCode() + " " + mStations.size());

@@ -10,10 +10,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.loopcupcakes.gassy.fragments.StationsFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     // TODO: 6/26/16 Enable Facebook login
     // TODO: 6/26/16 Add SwipeRefreshLayout
+    // TODO: 6/27/16 Add AutoComplete Google Places
+    // TODO: 6/27/16 Add location support
+    // TODO: 6/27/16 Runtime permissions
+    // TODO: 6/27/16 Add no GPS support
+    // TODO: 6/27/16 Add ViewPager ordering
+
+    private static final String STATIONS_FRAGMENT_TAG = "STATIONS_FRAGMENT_TAG";
 
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
@@ -30,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(mToolbar);
         setupDrawerLayout();
+        StationsFragment stationsFragment = StationsFragment.newInstance(false);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.a_main_frame, stationsFragment, STATIONS_FRAGMENT_TAG)
+                .commit();
     }
 
     @Override
