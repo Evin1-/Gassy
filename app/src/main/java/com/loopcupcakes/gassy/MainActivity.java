@@ -1,5 +1,7 @@
 package com.loopcupcakes.gassy;
 
+import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 
 import com.loopcupcakes.gassy.adapters.ViewPagerAdapter;
 import com.loopcupcakes.gassy.fragments.StationsFragment;
+import com.loopcupcakes.gassy.services.LocationService;
 import com.loopcupcakes.gassy.util.LocationHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     // TODO: 6/27/16 Add ViewPager ordering
     // TODO: 7/6/16 Add ButterKnife
     // TODO: 7/6/16 Handle configuration changes
+    // TODO: 7/7/16 Add RxJava to update distance labels
 
     private static final String TAG = "MainActivityTAG_";
 
@@ -38,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView mNavigationView;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private LocationHelper mLocationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +57,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         setupDrawerLayout();
-        setupLocation();
         setupViewPager();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mLocationHelper != null) {
-            mLocationHelper.stopUpdates();
-        }
+        triggerLocationService();
     }
 
     @Override
@@ -86,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Log.d(TAG, "onOptionsItemSelected: " + mLocationHelper.getLastLocation());
+//            Log.d(TAG, "onOptionsItemSelected: " + LocationManager..getLastLocation());
             return true;
         }
 
@@ -114,12 +109,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setupLocation() {
-        if (mLocationHelper != null) {
-            mLocationHelper.stopUpdates();
-        }
-        mLocationHelper = new LocationHelper(getApplicationContext());
-        mLocationHelper.requestUpdates();
+    private void triggerLocationService() {
+        Intent intent = new Intent(this, LocationService.class);
+        startService(intent);
     }
 
     private void setupViewPager() {
