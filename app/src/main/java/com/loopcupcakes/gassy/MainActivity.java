@@ -9,11 +9,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.loopcupcakes.gassy.adapters.ViewPagerAdapter;
 import com.loopcupcakes.gassy.fragments.StationsFragment;
+import com.loopcupcakes.gassy.util.LocationHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     // TODO: 6/27/16 Runtime permissions
     // TODO: 6/27/16 Add no GPS support
     // TODO: 6/27/16 Add ViewPager ordering
+    // TODO: 7/6/16 Add ButterKnife
+
+    private static final String TAG = "MainActivityTAG_";
 
     private static final String STATIONS_FRAGMENT_TAG = "STATIONS_FRAGMENT_TAG";
 
@@ -32,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView mNavigationView;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
+    private LocationHelper mLocationHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,21 +51,18 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout = (TabLayout) findViewById(R.id.a_main_tablayout);
 
         setSupportActionBar(mToolbar);
+
         setupDrawerLayout();
         setupViewPager();
+        setupLocation();
     }
 
-    private void setupViewPager() {
-        if (mViewPager == null) {
-            return;
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mLocationHelper != null) {
+            mLocationHelper.stopLocationUpdate();
         }
-
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(StationsFragment.newInstance(true), getString(R.string.title_best_rated));
-        viewPagerAdapter.addFragment(StationsFragment.newInstance(false), getString(R.string.title_closest));
-        mViewPager.setAdapter(viewPagerAdapter);
-
-        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
@@ -81,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Log.d(TAG, "onOptionsItemSelected: " + mLocationHelper.getLastLocation());
             return true;
         }
 
@@ -108,5 +111,23 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void setupLocation() {
+        mLocationHelper = new LocationHelper(getApplicationContext());
+        mLocationHelper.requestLocationUpdate();
+    }
+
+    private void setupViewPager() {
+        if (mViewPager == null) {
+            return;
+        }
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter.addFragment(StationsFragment.newInstance(true), getString(R.string.title_best_rated));
+        viewPagerAdapter.addFragment(StationsFragment.newInstance(false), getString(R.string.title_closest));
+        mViewPager.setAdapter(viewPagerAdapter);
+
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 }

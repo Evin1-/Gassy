@@ -107,7 +107,7 @@ public class StationsFragment extends Fragment {
                     List<Result> results = response.body().getResults();
 
                     for (Result result : results) {
-                        Log.d(TAG, "onResponse: " + result.getGeometry().getLocation() + " " + result.getName() + " " + result.getPhotos().size());
+//                        Log.d(TAG, "onResponse: " + result.getGeometry().getLocation() + " " + result.getName() + " " + result.getPhotos().size());
                         pushStation(result);
                     }
                 }
@@ -144,7 +144,7 @@ public class StationsFragment extends Fragment {
                     station = new Station(id, name, vicinity, latitude, longitude, 0.0, true);
                     stationReference.setValue(station);
                 } else {
-                    Log.d(TAG, "onDataChange: " + station.getLatitude() + " " + station.getLongitude());
+//                    Log.d(TAG, "onDataChange: " + station.getLatitude() + " " + station.getLongitude());
                 }
 
                 if (!mDistances.containsKey(station)) {
@@ -153,7 +153,7 @@ public class StationsFragment extends Fragment {
                     // TODO: 6/27/16 Change to notifyItemInserted
                     mAdapter.notifyDataSetChanged();
                 }
-                Log.d(TAG, "onDataChange: " + station.hashCode() + " " + mStations.size());
+//                Log.d(TAG, "onDataChange: " + station.hashCode() + " " + mStations.size());
             }
 
             @Override
