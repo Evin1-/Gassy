@@ -55,11 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
         setupDrawerLayout();
         setupLocation();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         setupViewPager();
     }
 
