@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     // TODO: 6/27/16 Add no GPS support
     // TODO: 6/27/16 Add ViewPager ordering
     // TODO: 7/6/16 Add ButterKnife
+    // TODO: 7/6/16 Handle configuration changes
 
     private static final String TAG = "MainActivityTAG_";
 
@@ -53,15 +54,20 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         setupDrawerLayout();
-        setupViewPager();
         setupLocation();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupViewPager();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         if (mLocationHelper != null) {
-            mLocationHelper.stopLocationUpdate();
+            mLocationHelper.stopUpdates();
         }
     }
 
@@ -114,8 +120,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupLocation() {
+        if (mLocationHelper != null) {
+            mLocationHelper.stopUpdates();
+        }
         mLocationHelper = new LocationHelper(getApplicationContext());
-        mLocationHelper.requestLocationUpdate();
+        mLocationHelper.requestUpdates();
     }
 
     private void setupViewPager() {

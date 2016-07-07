@@ -23,8 +23,8 @@ public class LocationHelper implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged: " + location.getAccuracy());
-        if (location.getAccuracy() < 100 && mLocationManager != null) {
-            mLocationManager.removeUpdates(this);
+        if (location.getAccuracy() < 100) {
+            stopUpdates();
         }
     }
 
@@ -43,15 +43,15 @@ public class LocationHelper implements LocationListener {
         Log.d(TAG, "onProviderDisabled: ");
     }
 
-    public void requestLocationUpdate() {
-        Log.d(TAG, "requestLocationUpdate: ");
+    public void requestUpdates() {
+        Log.d(TAG, "requestUpdates: ");
         if (mLocationManager != null) {
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         }
     }
 
-    public void stopLocationUpdate() {
+    public void stopUpdates() {
         if (mLocationManager != null) {
             mLocationManager.removeUpdates(this);
         }
