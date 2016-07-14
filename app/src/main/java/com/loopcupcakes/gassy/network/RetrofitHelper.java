@@ -32,7 +32,7 @@ public class RetrofitHelper {
         GOOGLE_PLACES_API_KEY = BuildConfig.GOOGLE_API_KEY;
     }
 
-    public Call<PlaceResponse> buildCall(String latitude, String longitude) {
+    public Call<PlaceResponse> buildCall(Double latitude, Double longitude) {
         GooglePlacesService duckService = mRetrofit.create(GooglePlacesService.class);
         return duckService.listPlaces(buildLocation(latitude, longitude),
                 PLACE_TYPE_GAS,
@@ -40,11 +40,11 @@ public class RetrofitHelper {
                 GOOGLE_PLACES_API_KEY);
     }
 
-    private String buildLocation(String latitude, String longitude) {
+    private String buildLocation(Double latitude, Double longitude) {
         return latitude + "," + longitude;
     }
 
-    public List<Result> getCloseLocations(String latitude, String longitude) {
+    public List<Result> getCloseLocations(Double latitude, Double longitude) {
         ArrayList<Result> results = new ArrayList<>();
 
         GooglePlacesService duckService = mRetrofit.create(GooglePlacesService.class);
