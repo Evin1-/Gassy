@@ -3,6 +3,7 @@ package com.loopcupcakes.gassy.services;
 import android.app.Service;
 import android.content.Intent;
 import android.location.LocationManager;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
@@ -13,12 +14,15 @@ import com.loopcupcakes.gassy.util.LocationHelper;
  */
 public class LocationService extends Service {
 
+    private static final long DEFAULT_DELAY_TIME = 10000;
+
     private LocationHelper mLocationHelper;
 
     @Override
     public void onCreate() {
         super.onCreate();
         setupLocation();
+        stopLocationDelayed();
     }
 
     @Override
@@ -33,19 +37,31 @@ public class LocationService extends Service {
         return null;
     }
 
-    private void setupLocation() {
-        if (mLocationHelper != null) {
-            mLocationHelper.stopUpdates();
-        }
-        mLocationHelper = new LocationHelper(getApplicationContext());
-        mLocationHelper.requestUpdates();
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         if (mLocationHelper != null) {
             mLocationHelper.stopUpdates();
         }
+    }
+
+    private void stopLocationDelayed() {
+        final Handler stopLocationHandler = new Handler();
+        stopLocationHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mLocationHelper != null) {
+                    mLocationHelper.stopUpdates();
+                }
+            }
+        }, DEFAULT_DELAY_TIME);
+    }
+
+    private void setupLocation() {
+        if (mLocationHelper != null) {
+            mLocationHelper.stopUpdates();
+        }
+        mLocationHelper = new LocationHelper(getApplicationContext());
+        mLocationHelper.requestUpdates();
     }
 }
