@@ -1,7 +1,6 @@
 package com.loopcupcakes.gassy;
 
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -11,14 +10,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.loopcupcakes.gassy.adapters.ViewPagerAdapter;
 import com.loopcupcakes.gassy.fragments.StationsFragment;
 import com.loopcupcakes.gassy.services.LocationService;
-import com.loopcupcakes.gassy.util.LocationHelper;
 
 public class MainActivity extends AppCompatActivity {
 

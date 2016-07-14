@@ -2,7 +2,6 @@ package com.loopcupcakes.gassy.services;
 
 import android.app.Service;
 import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
