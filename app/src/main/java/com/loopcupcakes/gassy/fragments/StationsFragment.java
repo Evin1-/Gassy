@@ -19,12 +19,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.loopcupcakes.gassy.R;
 import com.loopcupcakes.gassy.adapters.StationsAdapter;
+import com.loopcupcakes.gassy.entities.event.LocationEvent;
 import com.loopcupcakes.gassy.entities.firebase.Station;
 import com.loopcupcakes.gassy.entities.places.Location;
 import com.loopcupcakes.gassy.entities.places.PlaceResponse;
 import com.loopcupcakes.gassy.entities.places.Result;
 import com.loopcupcakes.gassy.network.RetrofitHelper;
 import com.loopcupcakes.gassy.util.NetworkChecker;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,8 +55,8 @@ public class StationsFragment extends Fragment {
 
     private DatabaseReference mDatabase;
 
-    private static final String LATITUDE_TEST = "19.3352665";
-    private static final String LONGITUDE_TEST = "-99.172322";
+    private static final Double LATITUDE_TEST = 19.3352665;
+    private static final Double LONGITUDE_TEST = -99.172322;
 
     private boolean mOrderedByRating;
 
@@ -74,10 +78,13 @@ public class StationsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
+
         mStations = new ArrayList<>();
         mDistances = new HashMap<>();
         mAdapter = new StationsAdapter(mStations);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -94,12 +101,26 @@ public class StationsFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
-        refreshRecycler();
+
+        android.location.Location testLocation = new android.location.Location("");
+        testLocation.setLatitude(LATITUDE_TEST);
+        testLocation.setLongitude(LONGITUDE_TEST);
+
+        EventBus.getDefault().post(new LocationEvent(testLocation));
     }
 
-    private void refreshRecycler() {
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Subscribe
+    public void refreshRecycler(LocationEvent locationEvent) {
+        Log.d(TAG, "refreshRecycler: ");
         RetrofitHelper retrofitHelper = new RetrofitHelper();
-        Call<PlaceResponse> placeResponseCall = retrofitHelper.buildCall(LATITUDE_TEST, LONGITUDE_TEST);
+        // TODO: 7/13/16 Change TEST variables
+        Call<PlaceResponse> placeResponseCall = retrofitHelper.buildCall(locationEvent.getLatitude(), locationEvent.getLongitude());
         if (NetworkChecker.checkInternet(getContext()) != NetworkChecker.NO_CONNECTION) {
             placeResponseCall.enqueue(new Callback<PlaceResponse>() {
                 @Override
