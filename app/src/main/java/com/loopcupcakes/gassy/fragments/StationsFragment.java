@@ -48,16 +48,17 @@ public class StationsFragment extends Fragment {
 
     private static final String STATIONS_CHILD_KEY = "stations";
     private static final String ORDERED_BY_RATING_KEY = "ORDERED_BY_RATING";
+    private static final Double LATITUDE_DEFAULT = 19.4326018;
+    private static final Double LONGITUDE_DEFAULT = -99.1353936;
 
     private RecyclerView mRecyclerView;
     private ArrayList<Station> mStations;
     private HashMap<Station, Double> mDistances;
     private StationsAdapter mAdapter;
 
-    private DatabaseReference mDatabase;
+    private Location mCurrentLocation;
 
-    private static final Double LATITUDE_TEST = 19.3352665;
-    private static final Double LONGITUDE_TEST = -99.172322;
+    private DatabaseReference mDatabase;
 
     private boolean mOrderedByRating;
 
@@ -85,6 +86,10 @@ public class StationsFragment extends Fragment {
         mAdapter = new StationsAdapter(mStations);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        mCurrentLocation = new Location("");
+        mCurrentLocation.setLatitude(LATITUDE_DEFAULT);
+        mCurrentLocation.setLongitude(LONGITUDE_DEFAULT);
+
         EventBus.getDefault().register(this);
     }
 
@@ -102,12 +107,7 @@ public class StationsFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
-
-        Location testLocation = new Location("");
-        testLocation.setLatitude(LATITUDE_TEST);
-        testLocation.setLongitude(LONGITUDE_TEST);
-
-        refreshRecycler(new LocationEvent(testLocation));
+        refreshRecycler(new LocationEvent(mCurrentLocation));
         Log.d(TAG, "onViewCreated: ");
     }
 
@@ -120,8 +120,8 @@ public class StationsFragment extends Fragment {
     @Subscribe
     public void refreshRecycler(LocationEvent locationEvent) {
         Log.d(TAG, "refreshRecycler: " + getTag() + " " + locationEvent.getLatitude() + " " + locationEvent.getLongitude());
+        mCurrentLocation = locationEvent.getLocation();
         RetrofitHelper retrofitHelper = new RetrofitHelper();
-        // TODO: 7/13/16 Change TEST variables
         Call<PlaceResponse> placeResponseCall = retrofitHelper.buildCall(locationEvent.getLatitude(), locationEvent.getLongitude());
         if (NetworkChecker.checkInternet(getContext()) != NetworkChecker.NO_CONNECTION) {
             placeResponseCall.enqueue(new Callback<PlaceResponse>() {
@@ -171,6 +171,7 @@ public class StationsFragment extends Fragment {
                 }
 
                 if (!mDistances.containsKey(station)) {
+                    // TODO: 7/14/16 Check if it is far enough from previous
                     mStations.add(station);
                     mDistances.put(station, 0.0);
                     // TODO: 6/27/16 Change to notifyItemInserted
