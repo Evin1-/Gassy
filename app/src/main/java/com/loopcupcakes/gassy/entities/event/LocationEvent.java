@@ -12,6 +12,10 @@ public class LocationEvent {
         this.location = location;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
     public Double getLatitude() {
         return location.getLatitude();
     }
