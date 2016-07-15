@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.loopcupcakes.gassy.util.LocationHelper;
 
@@ -14,8 +13,9 @@ import com.loopcupcakes.gassy.util.LocationHelper;
  */
 public class LocationService extends Service {
 
-    private static final long DEFAULT_DELAY_TIME = 10000;
     private static final String TAG = "LocationServiceTAG_";
+
+    private static final long DEFAULT_DELAY_TIME = 10000;
 
     private LocationHelper mLocationHelper;
 

@@ -60,6 +60,10 @@ public class StationsFragment extends Fragment {
 
     private boolean mOrderedByRating;
 
+    public StationsFragment() {
+
+    }
+
     public static StationsFragment newInstance(Boolean orderedByRating) {
         Bundle args = new Bundle();
         args.putBoolean(ORDERED_BY_RATING_KEY, orderedByRating);
@@ -67,10 +71,6 @@ public class StationsFragment extends Fragment {
         StationsFragment fragment = new StationsFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public StationsFragment() {
-
     }
 
     @Override
