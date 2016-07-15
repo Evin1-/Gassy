@@ -1,6 +1,7 @@
 package com.loopcupcakes.gassy.fragments;
 
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -21,7 +22,7 @@ import com.loopcupcakes.gassy.R;
 import com.loopcupcakes.gassy.adapters.StationsAdapter;
 import com.loopcupcakes.gassy.entities.event.LocationEvent;
 import com.loopcupcakes.gassy.entities.firebase.Station;
-import com.loopcupcakes.gassy.entities.places.Location;
+import com.loopcupcakes.gassy.entities.places.Loc;
 import com.loopcupcakes.gassy.entities.places.PlaceResponse;
 import com.loopcupcakes.gassy.entities.places.Result;
 import com.loopcupcakes.gassy.network.RetrofitHelper;
@@ -102,7 +103,7 @@ public class StationsFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
 
-        android.location.Location testLocation = new android.location.Location("");
+        Location testLocation = new Location("");
         testLocation.setLatitude(LATITUDE_TEST);
         testLocation.setLongitude(LONGITUDE_TEST);
 
@@ -129,7 +130,7 @@ public class StationsFragment extends Fragment {
                     List<Result> results = response.body().getResults();
 
                     for (Result result : results) {
-//                        Log.d(TAG, "onResponse: " + result.getGeometry().getLocation() + " " + result.getName() + " " + result.getPhotos().size());
+//                        Log.d(TAG, "onResponse: " + result.getGeometry().getLoc() + " " + result.getName() + " " + result.getPhotos().size());
                         pushStation(result);
                     }
                 }
@@ -146,9 +147,9 @@ public class StationsFragment extends Fragment {
     }
 
     private void pushStation(Result result) {
-        final Location location = result.getGeometry().getLocation();
-        final Double latitude = location.getLat();
-        final Double longitude = location.getLng();
+        final Loc loc = result.getGeometry().getLoc();
+        final Double latitude = loc.getLat();
+        final Double longitude = loc.getLng();
         final String placeId = result.getPlaceId();
         final String name = result.getName();
         final String vicinity = result.getVicinity();

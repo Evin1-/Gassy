@@ -8,30 +8,30 @@ public class Geometry {
 
     @SerializedName("location")
     @Expose
-    private Location location;
+    private Loc loc;
 
     /**
      * 
      * @return
-     *     The location
+     *     The loc
      */
-    public Location getLocation() {
-        return location;
+    public Loc getLoc() {
+        return loc;
     }
 
     /**
      * 
-     * @param location
-     *     The location
+     * @param loc
+     *     The loc
      */
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setLoc(Loc loc) {
+        this.loc = loc;
     }
 
     @Override
     public String toString() {
         return "Geometry{" +
-                "location=" + location +
+                "loc=" + loc +
                 '}';
     }
 }

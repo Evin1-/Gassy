@@ -4,7 +4,7 @@ package com.loopcupcakes.gassy.entities.places;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Location {
+public class Loc {
 
     @SerializedName("lat")
     @Expose
