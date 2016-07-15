@@ -106,7 +106,8 @@ public class StationsFragment extends Fragment {
         testLocation.setLatitude(LATITUDE_TEST);
         testLocation.setLongitude(LONGITUDE_TEST);
 
-        EventBus.getDefault().post(new LocationEvent(testLocation));
+        refreshRecycler(new LocationEvent(testLocation));
+        Log.d(TAG, "onViewCreated: ");
     }
 
     @Override
@@ -117,7 +118,7 @@ public class StationsFragment extends Fragment {
 
     @Subscribe
     public void refreshRecycler(LocationEvent locationEvent) {
-        Log.d(TAG, "refreshRecycler: ");
+        Log.d(TAG, "refreshRecycler: " + getTag() + " " + locationEvent.getLatitude() + " " + locationEvent.getLongitude());
         RetrofitHelper retrofitHelper = new RetrofitHelper();
         // TODO: 7/13/16 Change TEST variables
         Call<PlaceResponse> placeResponseCall = retrofitHelper.buildCall(locationEvent.getLatitude(), locationEvent.getLongitude());
