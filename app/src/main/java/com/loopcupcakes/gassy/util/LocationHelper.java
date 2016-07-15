@@ -8,6 +8,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.loopcupcakes.gassy.entities.event.LocationEvent;
+
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Created by evin on 6/28/16.
  */
@@ -24,6 +28,7 @@ public class LocationHelper implements LocationListener {
     public void onLocationChanged(Location location) {
         Log.d(TAG, "onLocationChanged: " + location.getAccuracy());
         if (location.getAccuracy() < 100) {
+            EventBus.getDefault().post(new LocationEvent(location));
             stopUpdates();
         }
     }
