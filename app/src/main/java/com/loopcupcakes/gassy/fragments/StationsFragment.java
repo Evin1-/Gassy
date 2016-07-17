@@ -35,6 +35,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -132,6 +133,10 @@ public class StationsFragment extends Fragment {
 //                        Log.d(TAG, "onResponse: " + result.getGeometry().getLoc() + " " + result.getName() + " " + result.getPhotos().size());
                         pushStation(result);
                     }
+
+                    for (Map.Entry<Station, Double> entry : mDistances.entrySet()) {
+                        Log.d(TAG, "onResponse: " + entry.getKey() + " " + entry.getValue());
+                    }
                 }
 
                 @Override
@@ -172,7 +177,9 @@ public class StationsFragment extends Fragment {
                 if (!mDistances.containsKey(station)) {
                     // TODO: 7/14/16 Check if it is far enough from previous
                     mStations.add(station);
-                    mDistances.put(station, 0.0);
+                    Location aux = buildLocation(station.getLatitude(), station.getLongitude());
+                    mDistances.put(station, (double) mCurrentLocation.distanceTo(aux));
+                    Log.d(TAG, "onDataChange: " + station + " " + mDistances.get(station));
                     // TODO: 6/27/16 Change to notifyItemInserted
                     mAdapter.notifyDataSetChanged();
                 }
@@ -191,11 +198,17 @@ public class StationsFragment extends Fragment {
         Location lastKnownLocation = locationHelper.getLastLocation();
 
         if (lastKnownLocation == null) {
-            mCurrentLocation = new Location("");
-            mCurrentLocation.setLatitude(LATITUDE_DEFAULT);
-            mCurrentLocation.setLongitude(LONGITUDE_DEFAULT);
+            mCurrentLocation = buildLocation(LATITUDE_DEFAULT, LONGITUDE_DEFAULT);
         } else {
             mCurrentLocation = lastKnownLocation;
         }
+    }
+
+    private Location buildLocation(Double latitude, Double longitude) {
+        Location aux = new Location("");
+        aux.setLatitude(latitude);
+        aux.setLongitude(longitude);
+
+        return aux;
     }
 }
