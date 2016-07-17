@@ -26,6 +26,7 @@ import com.loopcupcakes.gassy.entities.places.Loc;
 import com.loopcupcakes.gassy.entities.places.PlaceResponse;
 import com.loopcupcakes.gassy.entities.places.Result;
 import com.loopcupcakes.gassy.network.RetrofitHelper;
+import com.loopcupcakes.gassy.util.LocationHelper;
 import com.loopcupcakes.gassy.util.NetworkChecker;
 
 import org.greenrobot.eventbus.EventBus;
@@ -86,9 +87,7 @@ public class StationsFragment extends Fragment {
         mAdapter = new StationsAdapter(mStations);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mCurrentLocation = new Location("");
-        mCurrentLocation.setLatitude(LATITUDE_DEFAULT);
-        mCurrentLocation.setLongitude(LONGITUDE_DEFAULT);
+        setupCurrentLocation();
 
         EventBus.getDefault().register(this);
     }
@@ -185,5 +184,18 @@ public class StationsFragment extends Fragment {
                 Log.e(TAG, "onCancelled: " + databaseError);
             }
         });
+    }
+
+    private void setupCurrentLocation() {
+        LocationHelper locationHelper = new LocationHelper(getActivity().getApplicationContext());
+        Location lastKnownLocation = locationHelper.getLastLocation();
+
+        if (lastKnownLocation == null) {
+            mCurrentLocation = new Location("");
+            mCurrentLocation.setLatitude(LATITUDE_DEFAULT);
+            mCurrentLocation.setLongitude(LONGITUDE_DEFAULT);
+        } else {
+            mCurrentLocation = lastKnownLocation;
+        }
     }
 }
