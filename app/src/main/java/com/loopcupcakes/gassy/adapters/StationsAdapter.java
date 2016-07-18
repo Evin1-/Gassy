@@ -29,6 +29,7 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
         public final TextView nameTextView;
         public final TextView coordinatesTextView;
         public final TextView distanceTextView;
+        public final TextView ratingTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -36,6 +37,7 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
             nameTextView = (TextView) itemView.findViewById(R.id.rvItemTitle);
             coordinatesTextView = (TextView) itemView.findViewById(R.id.rvItemPopularity);
             distanceTextView = (TextView) itemView.findViewById(R.id.rvItemShortDescription);
+            ratingTextView = (TextView) itemView.findViewById(R.id.rvItemRating);
         }
     }
 
@@ -65,6 +67,9 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
 
         TextView textViewDistance = holder.distanceTextView;
         textViewDistance.setText(String.format(mCurrentLocale, "%.2f", mDistances.get(station)));
+
+        TextView textViewRating = holder.ratingTextView;
+        textViewRating.setText(String.format(mCurrentLocale, "%.2f", station.getRating()));
     }
 
     @Override
