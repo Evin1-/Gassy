@@ -36,9 +36,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -175,6 +176,15 @@ public class StationsFragment extends Fragment {
                 if (!mDistances.containsKey(station)) {
                     // TODO: 7/14/16 Check if it is far enough from previous
                     mStations.add(station);
+                    // TODO: 7/17/16 Improve sorting algorithm
+                    if (mOrderedByRating) {
+                        Collections.sort(mStations, new Comparator<Station>() {
+                            @Override
+                            public int compare(Station st1, Station st2) {
+                                return ((int) ((st2.getRating() * 100) - (st1.getRating() * 100)));
+                            }
+                        });
+                    }
                     Location aux = buildLocation(station.getLatitude(), station.getLongitude());
                     mDistances.put(station, (double) mCurrentLocation.distanceTo(aux));
                     Log.d(TAG, "onDataChange: " + station + " " + mDistances.get(station) + " " + station.getRating());
