@@ -26,6 +26,8 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        // TODO: 7/17/16 Add Vicinity?
+
         public final TextView nameTextView;
         public final TextView coordinatesTextView;
         public final TextView distanceTextView;
