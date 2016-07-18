@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.loopcupcakes.gassy.R;
 import com.loopcupcakes.gassy.adapters.StationsAdapter;
+import com.loopcupcakes.gassy.decorators.SimpleDecorator;
 import com.loopcupcakes.gassy.entities.events.LocationEvent;
 import com.loopcupcakes.gassy.entities.firebase.Station;
 import com.loopcupcakes.gassy.entities.places.Loc;
@@ -105,9 +106,7 @@ public class StationsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.f_stations_recycler);
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        setupRecycler(view);
 
         refreshRecycler(new LocationEvent(mCurrentLocation));
         Log.d(TAG, "onViewCreated: ");
@@ -134,10 +133,6 @@ public class StationsFragment extends Fragment {
                     for (Result result : results) {
 //                        Log.d(TAG, "onResponse: " + result.getGeometry().getLoc() + " " + result.getName() + " " + result.getPhotos().size());
                         pushStation(result);
-                    }
-
-                    for (Map.Entry<Station, Double> entry : mDistances.entrySet()) {
-                        Log.d(TAG, "onResponse: " + entry.getKey() + " " + entry.getValue());
                     }
                 }
 
@@ -194,6 +189,14 @@ public class StationsFragment extends Fragment {
                 Log.e(TAG, "onCancelled: " + databaseError);
             }
         });
+    }
+
+    private void setupRecycler(View view) {
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.f_stations_recycler);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+        // TODO: 7/17/16 Check margin dimensions
+        mRecyclerView.addItemDecoration(new SimpleDecorator(20));
     }
 
     private void setupCurrentLocation() {
