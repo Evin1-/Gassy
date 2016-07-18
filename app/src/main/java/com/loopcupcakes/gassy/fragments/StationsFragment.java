@@ -28,6 +28,7 @@ import com.loopcupcakes.gassy.entities.places.Result;
 import com.loopcupcakes.gassy.network.RetrofitHelper;
 import com.loopcupcakes.gassy.util.LocationHelper;
 import com.loopcupcakes.gassy.util.NetworkChecker;
+import com.loopcupcakes.gassy.util.RandomHelper;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -168,7 +169,8 @@ public class StationsFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Station station = dataSnapshot.getValue(Station.class);
                 if (station == null) {
-                    station = new Station(id, name, vicinity, latitude, longitude, 0.0, true);
+                    // TODO: 7/17/16 Change rating to query actual one
+                    station = new Station(id, name, vicinity, latitude, longitude, RandomHelper.generateRandom(5), true);
                     stationReference.setValue(station);
                 } else {
 //                    Log.d(TAG, "onDataChange: " + station.getLatitude() + " " + station.getLongitude());
@@ -179,7 +181,7 @@ public class StationsFragment extends Fragment {
                     mStations.add(station);
                     Location aux = buildLocation(station.getLatitude(), station.getLongitude());
                     mDistances.put(station, (double) mCurrentLocation.distanceTo(aux));
-                    Log.d(TAG, "onDataChange: " + station + " " + mDistances.get(station));
+                    Log.d(TAG, "onDataChange: " + station + " " + mDistances.get(station) + " " + station.getRating());
                     // TODO: 6/27/16 Change to notifyItemInserted
                     mAdapter.notifyDataSetChanged();
                 }
