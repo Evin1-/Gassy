@@ -10,6 +10,7 @@ import com.loopcupcakes.gassy.R;
 import com.loopcupcakes.gassy.entities.firebase.Station;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by evin on 6/3/16.
@@ -19,20 +20,26 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
     private static final String TAG = "StationsAdapterTAG_";
 
     private ArrayList<Station> mStations;
+    private HashMap<Station, Double> mDistances;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public final TextView textView;
+        public final TextView nameTextView;
+        public final TextView coordinatesTextView;
+        public final TextView distanceTextView;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            textView = (TextView) itemView.findViewById(R.id.rvItemTitle);
+            nameTextView = (TextView) itemView.findViewById(R.id.rvItemTitle);
+            coordinatesTextView = (TextView) itemView.findViewById(R.id.rvItemPopularity);
+            distanceTextView = (TextView) itemView.findViewById(R.id.rvItemShortDescription);
         }
     }
 
-    public StationsAdapter(ArrayList<Station> stations) {
+    public StationsAdapter(ArrayList<Station> stations, HashMap<Station, Double> distances) {
         this.mStations = stations;
+        this.mDistances = distances;
     }
 
     @Override
@@ -47,8 +54,14 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Station station = mStations.get(position);
 
-        TextView textViewName = holder.textView;
-        textViewName.setText(String.format("%s %s", station.getLatitude(), station.getLongitude()));
+        TextView textViewName = holder.nameTextView;
+        textViewName.setText(station.getName());
+
+        TextView textViewCoordinates = holder.coordinatesTextView;
+        textViewCoordinates.setText(String.format("%.2f %.2f", station.getLatitude(), station.getLongitude()));
+
+        TextView textViewDistance = holder.distanceTextView;
+        textViewDistance.setText(String.format("%.2f", mDistances.get(station)));
     }
 
     @Override
