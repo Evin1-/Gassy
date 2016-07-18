@@ -1,5 +1,6 @@
 package com.loopcupcakes.gassy.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,7 @@ import android.widget.TextView;
 import com.loopcupcakes.gassy.R;
 import com.loopcupcakes.gassy.entities.firebase.Station;
 import com.loopcupcakes.gassy.util.FormatHelper;
-
-import org.apache.commons.lang3.text.WordUtils;
+import com.loopcupcakes.gassy.util.MapHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,18 +23,24 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
 
     private static final String TAG = "StationsAdapterTAG_";
 
-    private ArrayList<Station> mStations;
-    private HashMap<Station, Double> mDistances;
-    private Locale mCurrentLocale;
+    private final ArrayList<Station> mStations;
+    private final HashMap<Station, Double> mDistances;
+    private final Locale mCurrentLocale;
+
+    public static Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         // TODO: 7/17/16 Add Vicinity?
 
-        public final TextView nameTextView;
-        public final TextView coordinatesTextView;
-        public final TextView distanceTextView;
-        public final TextView ratingTextView;
+        private final TextView nameTextView;
+        private final TextView coordinatesTextView;
+        private final TextView distanceTextView;
+        private final TextView ratingTextView;
+
+        private String itemName;
+        private Double itemLatitude;
+        private Double itemLongitude;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -43,13 +49,21 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
             coordinatesTextView = (TextView) itemView.findViewById(R.id.rvItemPopularity);
             distanceTextView = (TextView) itemView.findViewById(R.id.rvItemShortDescription);
             ratingTextView = (TextView) itemView.findViewById(R.id.rvItemRating);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    MapHelper.showMap(mContext, itemLatitude, itemLongitude, itemName);
+                }
+            });
         }
     }
 
-    public StationsAdapter(ArrayList<Station> stations, HashMap<Station, Double> distances, Locale locale) {
+    public StationsAdapter(ArrayList<Station> stations, HashMap<Station, Double> distances, Locale locale, Context context) {
         this.mStations = stations;
         this.mDistances = distances;
         this.mCurrentLocale = locale;
+        mContext = context;
     }
 
     @Override
@@ -75,6 +89,10 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
 
         TextView textViewRating = holder.ratingTextView;
         textViewRating.setText(String.format(mCurrentLocale, "%.2f", station.getRating()));
+
+        holder.itemLatitude = station.getLatitude();
+        holder.itemLongitude = station.getLongitude();
+        holder.itemName = station.getName();
     }
 
     @Override

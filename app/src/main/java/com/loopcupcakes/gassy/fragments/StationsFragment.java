@@ -89,7 +89,7 @@ public class StationsFragment extends Fragment {
 
         mStations = new ArrayList<>();
         mDistances = new HashMap<>();
-        mAdapter = new StationsAdapter(mStations, mDistances, LocaleHelper.getCurrentLocale(getContext()));
+        mAdapter = new StationsAdapter(mStations, mDistances, LocaleHelper.getCurrentLocale(getActivity().getApplicationContext()), getActivity().getApplicationContext());
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         setupCurrentLocation();
