@@ -8,7 +8,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.loopcupcakes.gassy.entities.event.LocationEvent;
+import com.loopcupcakes.gassy.entities.events.LocationEvent;
 
 import org.greenrobot.eventbus.EventBus;
 

@@ -20,7 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.loopcupcakes.gassy.R;
 import com.loopcupcakes.gassy.adapters.StationsAdapter;
-import com.loopcupcakes.gassy.entities.event.LocationEvent;
+import com.loopcupcakes.gassy.entities.events.LocationEvent;
 import com.loopcupcakes.gassy.entities.firebase.Station;
 import com.loopcupcakes.gassy.entities.places.Loc;
 import com.loopcupcakes.gassy.entities.places.PlaceResponse;

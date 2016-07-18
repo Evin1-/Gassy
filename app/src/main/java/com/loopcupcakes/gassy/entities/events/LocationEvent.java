@@ -1,4 +1,4 @@
-package com.loopcupcakes.gassy.entities.event;
+package com.loopcupcakes.gassy.entities.events;
 
 import android.location.Location;
 
