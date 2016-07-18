@@ -26,6 +26,7 @@ import com.loopcupcakes.gassy.entities.places.Loc;
 import com.loopcupcakes.gassy.entities.places.PlaceResponse;
 import com.loopcupcakes.gassy.entities.places.Result;
 import com.loopcupcakes.gassy.network.RetrofitHelper;
+import com.loopcupcakes.gassy.util.LocaleHelper;
 import com.loopcupcakes.gassy.util.LocationHelper;
 import com.loopcupcakes.gassy.util.NetworkChecker;
 import com.loopcupcakes.gassy.util.RandomHelper;
@@ -86,7 +87,7 @@ public class StationsFragment extends Fragment {
 
         mStations = new ArrayList<>();
         mDistances = new HashMap<>();
-        mAdapter = new StationsAdapter(mStations, mDistances);
+        mAdapter = new StationsAdapter(mStations, mDistances, LocaleHelper.getCurrentLocale(getContext()));
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         setupCurrentLocation();

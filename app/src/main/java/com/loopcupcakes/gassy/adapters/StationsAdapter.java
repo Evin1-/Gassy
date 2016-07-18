@@ -11,6 +11,7 @@ import com.loopcupcakes.gassy.entities.firebase.Station;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Created by evin on 6/3/16.
@@ -21,6 +22,7 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
 
     private ArrayList<Station> mStations;
     private HashMap<Station, Double> mDistances;
+    private Locale mCurrentLocale;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -37,9 +39,10 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
         }
     }
 
-    public StationsAdapter(ArrayList<Station> stations, HashMap<Station, Double> distances) {
+    public StationsAdapter(ArrayList<Station> stations, HashMap<Station, Double> distances, Locale locale) {
         this.mStations = stations;
         this.mDistances = distances;
+        this.mCurrentLocale = locale;
     }
 
     @Override
@@ -58,10 +61,10 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
         textViewName.setText(station.getName());
 
         TextView textViewCoordinates = holder.coordinatesTextView;
-        textViewCoordinates.setText(String.format("%.2f %.2f", station.getLatitude(), station.getLongitude()));
+        textViewCoordinates.setText(String.format(mCurrentLocale, "%.2f %.2f", station.getLatitude(), station.getLongitude()));
 
         TextView textViewDistance = holder.distanceTextView;
-        textViewDistance.setText(String.format("%.2f", mDistances.get(station)));
+        textViewDistance.setText(String.format(mCurrentLocale, "%.2f", mDistances.get(station)));
     }
 
     @Override
