@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import com.loopcupcakes.gassy.R;
 import com.loopcupcakes.gassy.entities.firebase.Station;
+import com.loopcupcakes.gassy.util.FormatHelper;
+
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,10 +65,10 @@ public class StationsAdapter extends RecyclerView.Adapter<StationsAdapter.ViewHo
         Station station = mStations.get(position);
 
         TextView textViewName = holder.nameTextView;
-        textViewName.setText(station.getName());
+        textViewName.setText(FormatHelper.formatTitle(station.getName()));
 
         TextView textViewCoordinates = holder.coordinatesTextView;
-        textViewCoordinates.setText(String.format(mCurrentLocale, "%.2f %.2f", station.getLatitude(), station.getLongitude()));
+        textViewCoordinates.setText(String.format(mCurrentLocale, "%.5f %.5f", station.getLatitude(), station.getLongitude()));
 
         TextView textViewDistance = holder.distanceTextView;
         textViewDistance.setText(String.format(mCurrentLocale, "%.2f", mDistances.get(station)));
